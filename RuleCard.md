@@ -27,17 +27,17 @@
 
 
 ### Large Scoring
-10000	dtarget 1, dtarget inline, dtarget 3 lit, dtarget 4 lit, inlane lit, lr target lit, saucer dtarget 4 goal
-15000	dtarget 3 completion, dtarget 4 completion
-20000	saucer dtarget inline goal
-25000	wood beast target
-25000	inlane "hurry up"
-30000	saucer dtarget 3 goal
-50000	lr target hurry up
-50000	top target special
+* 10000 - dtarget 1, dtarget inline, dtarget 3 lit, dtarget 4 lit, inlane lit, lr target lit, saucer dtarget 4 goal
+* 15000 - dtarget 3 completion, dtarget 4 completion
+* 20000 - saucer dtarget inline goal
+* 25000 - wood beast target
+* 25000 - inlane "hurry up"
+* 30000 - saucer dtarget 3 goal
+* 50000 - lr target hurry up
+* 50000 - top target special
 
-1000	spinner
-2200	pop bumper
-50000	wizard start
-50000	wizard ming attack
-150000	wizard ming kill
+* 1000 - wizard spinner
+* 2200 - wizard pop bumper
+* 50000 - wizard start
+* 50000 - wizard ming attack
+* 150000 - wizard ming kill
