@@ -1,0 +1,494 @@
+/**************************************************************************
+  This file is part of Flash Gordon 2021.
+
+  I, Tim Murren, the author of this program disclaim all copyright
+  in order to make this program freely available in perpetuity to
+  anyone who would like to use it. Tim Murren, 2/5/2021
+
+  Flash Gordon 2021 is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  Flash Gordon 2021 is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  See <https://www.gnu.org/licenses/>.
+*/
+
+// These are exmaple values - fill these in with your machine's definitions
+#define NUM_OF_LAMPS                      77 // 60 before aux
+
+// Lamp Board (sort by schematics)
+#define LA_BONUS_MINI_1K                  0 // 1K MINI BONUS
+#define LA_BONUS_MINI_2K                  1 // 2K MINI BONUS
+#define LA_BONUS_MINI_3K                  2 // 3K MINI BONUS
+#define LA_BONUS_MINI_4K                  3 // 4K MINI BONUS
+#define LA_BONUS_MINI_5K                  4 // 5K MINI BONUS
+#define LA_BONUS_MINI_6K                  5 // 6K MINI BONUS
+#define LA_BONUS_MINI_7K                  6 // 7K MINI BONUS
+#define LA_BONUS_MINI_8K                  7 // 8K MINI BONUS
+#define LA_BONUS_MINI_9K                  8 // 9K MINI BONUS
+#define LA_BONUS_MINI_10K                 9 // 10K MINI BONUS
+#define LA_SPINNER_RIGHT                  10 // RIGHT SPINNER
+#define LA_SPINNER_LEFT                   11 // LEFT SPINNER
+#define LA_BONUS_SUPER_1K                 12 // 1K SUPER BONUS
+#define LA_BONUS_SUPER_2K                 13 // 2K SUPER BONUS
+#define LA_BONUS_SUPER_3K                 14 // 3K SUPER BONUS
+#define LA_BONUS_SUPER_4K                 15 // 4K SUPER BONUS
+#define LA_BONUS_SUPER_5K                 16 // 5K SUPER BONUS
+#define LA_BONUS_SUPER_6K                 17 // 6K SUPER BONUS
+#define LA_BONUS_SUPER_7K                 18 // 7K SUPER BONUS
+#define LA_BONUS_SUPER_8K                 19 // 8K SUPER BONUS
+#define LA_BONUS_SUPER_9K                 20 // 9K SUPER BONUS
+#define LA_BONUS_SUPER_10K                21 // 10K SUPER BONUS
+#define LA_BONUS_MINI_50K                 22 // 50K MINI BONUS
+#define LA_BONUS_SUPER_100K               23 // 100K SUPER BONUS
+#define LA_BONUS_2X                       24 // 2X BONUS
+#define LA_BONUS_3X                       25 // 3X BONUS
+#define LA_BONUS_4X                       26 // 4X BONUS
+#define LA_BONUS_5X                       27 // 5X BONUS
+#define LA_DTARGET_ARROW_1                28 // #1 DROP TARGET ARROW
+#define LA_DTARGET_ARROW_2                29 // #2 DROP TARGET ARROW
+#define LA_DTARGET_ARROW_3                30 // #3 DROP TARGET ARROW
+#define LA_DTARGET_BONUS_4X               31 // 4X 3 DROP TARGET
+#define LA_DTARGET_4_D                    32 // 4 DROP TARGET "A" (BOTTOM)
+#define LA_DTARGET_4_C                    33 // 4 DROP TARGET "B"
+#define LA_DTARGET_4_B                    34 // 4 DROP TARGET "C"
+#define LA_DTARGET_4_A                    35 // 4 DROP TARGET "D" (TOP)
+#define LA_TARGET_LRIGHT_BOTTOM           36 // RT. SIDE LOWER TARGET
+#define LA_INLANE_RIGHT                   37 // FLIPPER FEED LANE (rt.)
+#define LA_INLANE_LEFT                    38 // FLIPPER FEED LANE (LEFT)
+#define LA_TARGET_LRIGHT_TOP              39 // RT. SIDE UPPER TARGET
+#define LA_SAME_PLAYER_SHOOTS_AGAIN       40 // SAME PLAYER SHOOTS AGAIN
+#define LA_MATCH                          41 // MATCH
+#define LA_SHOOT_AGAIN                    42 // SHOOT AGAIN
+#define LA_CREDIT_INDICATOR               43 // CREDIT INDICATOR
+#define LA_SAUCER_10K                     44 // 10K SAUCER
+#define LA_SAUCER_20K                     45 // 20K SAUCER - SAUCER_20K
+#define LA_SAUCER_XBALL                   46 // X-BALL SAUCCER
+#define LA_DTARGET_BONUS_5X               47 // 5X 4 DROP TARGET
+#define LA_BALL_IN_PLAY                   48 // BALL IN PLAY
+#define LA_HIGH_SCORE_TO_DATE             49 // HIGH SCORE TO DATE
+#define LA_GAME_OVER                      50 // GAME OVER
+#define LA_TILT                           51 // TILT
+#define LA_POP_TOP                        52 // TOP THUMPER BUMPER
+#define LA_TARGET_WOOD_BEAST_XBALL        53 // INLINE LA_DROP TARGET X-BALL
+#define LA_SAUCER_30K                     54 // 30K SAUCER
+#define LA_TARGET_UPPER_COLLECT_BONUS     55 // TOP TAR. COLLECT BONUS
+#define LA_OUTLANE_RIGHT_SPECIAL          56 // RT. OUT SPECIAL
+#define LA_OUTLANE_LEFT_SPECIAL           57 // LEFT OUT SPECIAL
+#define LA_STAR_PFIELD_BOTTOM             58 // LOWER TOP RT. RO. BUTTON
+#define LA_TARGET_UPPER_SPECIAL           59 // TOP TAR. SPECIAL
+
+// Aux Lamp Board (sorted by schematics)
+#define LA_STAR_PFIELD_TOP                60 // UPPER TOP RT. RO. BUTTON
+#define LA_STAR_SHOOTER_TOP               61 // TOP SHOOTER ALLEY RO. BUTTON
+#define LA_STAR_SHOOTER_MIDDLE            62 // MIDDLE SHOOTER ALLEY RO. BUTTON
+#define LA_STAR_SHOOTER_BOTTOM            63 // LOWER SHOOTER ALLEY RO. BUTTON
+#define LA_FLASH_GORDON_1                 64 // 1 FLASH GORDON
+#define LA_FLASH_GORDON_2                 65 // 2 FLASH GORDON
+#define LA_FLASH_GORDON_3                 66 // 3 FLASH GORDON
+// #define N/A                            67 // not used
+#define LA_FLASH_GORDON_4                 68 // 4 FLASH GORDON
+#define LA_FLASH_GORDON_5                 69 // 5 FLASH GORDON
+#define LA_FLASH_GORDON_6                 70 // 6 FLASH GORDON
+// #define N/A                            71 // not used
+#define LA_MING_BOTTOM                    72 // FACE OF MING
+#define LA_MING_TOP                       73 // FACE OF MING
+// #define N/A                            74 // not used
+#define LA_FLASH_STROBE                   75 // BACK BOX STROBE
+#define LA_CLOCK_15_SECONDS_3X            76 // 3X 15 SECOND CLOCK
+#define LA_CLOCK_15_SECONDS_2X            77 // 2X 15 SECOND CLOCK
+#define LA_SAUCER_ARROW_3X                78 // 3X SAUCER ARROW
+#define LA_SAUCER_ARROW_2X                79 // 2X SAUCER ARROW
+// #define N/A                            80 // not used
+// #define N/A                            81 // not used
+// #define N/A                            82 // not used
+// #define N/A                            83 // not used
+// #define N/A                            84 // not used
+// #define N/A                            85 // not used
+// #define N/A                            86 // not used
+// #define N/A                            87 // not used
+
+#define NUM_OF_SAUCER_LAMPS_UP 30
+struct SaucerLampsUp {
+  byte lightNumSaucerUp;
+  byte rowSaucerUp;
+};
+struct SaucerLampsUp SaucerLampsUp[] = {
+    {LA_BONUS_3X, 1},
+    {LA_BONUS_4X, 1},
+    {LA_BONUS_2X, 2},
+    {LA_BONUS_5X, 2},
+    {LA_BONUS_SUPER_6K, 3},
+    {LA_BONUS_SUPER_5K, 4},
+    {LA_BONUS_SUPER_7K, 4},
+    {LA_BONUS_SUPER_4K, 5},
+    {LA_BONUS_SUPER_8K, 5},
+    {LA_BONUS_SUPER_100K, 6},
+    {LA_BONUS_SUPER_3K, 7},
+    {LA_BONUS_SUPER_9K, 7},
+    {LA_BONUS_SUPER_2K, 8},
+    {LA_BONUS_SUPER_10K, 8},
+    {LA_BONUS_SUPER_1K, 9},
+    {LA_BONUS_MINI_6K, 10},
+    {LA_BONUS_MINI_5K, 11},
+    {LA_BONUS_MINI_7K, 11},
+    {LA_BONUS_MINI_4K, 12},
+    {LA_BONUS_MINI_8K, 12},
+    {LA_BONUS_MINI_50K, 13},
+    {LA_BONUS_MINI_3K, 14},
+    {LA_BONUS_MINI_9K, 14},
+    {LA_BONUS_MINI_2K, 15},
+    {LA_BONUS_MINI_10K, 15},
+    {LA_BONUS_MINI_1K, 16},
+    {LA_SAUCER_10K,17},
+    {LA_SAUCER_20K, 18},
+    {LA_SAUCER_30K, 19},
+    {LA_SAUCER_XBALL, 20}
+};
+
+#define NUM_OF_SAUCER_LAMPS_DOWN 30
+struct SaucerLampsDown {
+  byte lightNumSaucerDown;
+  byte rowSaucerDown;
+};
+struct SaucerLampsDown SaucerLampsDown[] = {
+    {LA_SAUCER_XBALL, 1},
+    {LA_SAUCER_30K, 2},
+    {LA_SAUCER_20K, 3},
+    {LA_SAUCER_10K,4},
+    {LA_BONUS_MINI_1K, 5},
+    {LA_BONUS_MINI_10K, 6},
+    {LA_BONUS_MINI_2K, 6},
+    {LA_BONUS_MINI_9K, 7},
+    {LA_BONUS_MINI_3K, 7},
+    {LA_BONUS_MINI_50K, 8},
+    {LA_BONUS_MINI_8K, 9},
+    {LA_BONUS_MINI_4K, 9},
+    {LA_BONUS_MINI_7K, 10},
+    {LA_BONUS_MINI_5K, 10},
+    {LA_BONUS_MINI_6K, 11},
+    {LA_BONUS_SUPER_1K, 12},
+    {LA_BONUS_SUPER_10K, 13},
+    {LA_BONUS_SUPER_2K, 13},
+    {LA_BONUS_SUPER_9K, 14},
+    {LA_BONUS_SUPER_3K, 14},
+    {LA_BONUS_SUPER_100K, 15},
+    {LA_BONUS_SUPER_8K, 16},
+    {LA_BONUS_SUPER_4K, 16},
+    {LA_BONUS_SUPER_7K, 17},
+    {LA_BONUS_SUPER_5K, 17},
+    {LA_BONUS_SUPER_6K, 18},
+    {LA_BONUS_5X, 19},
+    {LA_BONUS_2X, 19},
+    {LA_BONUS_4X, 20},
+    {LA_BONUS_3X, 20}
+};
+
+#define NUM_OF_ATTRACT_LAMPS_UP 35
+struct AttractLampsUp {
+  byte lightNumUp;
+  byte rowUp;
+};
+struct AttractLampsUp AttractLampsUp[] = {
+    {LA_SHOOT_AGAIN, 1},
+    {LA_BONUS_3X, 2},
+    {LA_BONUS_4X, 2},
+    {LA_BONUS_2X, 3},
+    {LA_BONUS_5X, 3},
+    {LA_BONUS_SUPER_6K, 4},
+    {LA_BONUS_SUPER_5K, 5},
+    {LA_BONUS_SUPER_7K, 5},
+    {LA_BONUS_SUPER_4K, 6},
+    {LA_BONUS_SUPER_8K, 6},
+    {LA_BONUS_SUPER_100K, 7},
+    {LA_BONUS_SUPER_3K, 8},
+    {LA_BONUS_SUPER_9K, 8},
+    {LA_BONUS_SUPER_2K, 9},
+    {LA_BONUS_SUPER_10K, 9},
+    {LA_CLOCK_15_SECONDS_2X, 10},
+    {LA_CLOCK_15_SECONDS_3X, 10},
+    {LA_BONUS_SUPER_1K, 11},
+    {LA_BONUS_MINI_6K, 12},
+    {LA_BONUS_MINI_5K, 13},
+    {LA_BONUS_MINI_7K, 13},
+    {LA_BONUS_MINI_4K, 14},
+    {LA_BONUS_MINI_8K, 14},
+    {LA_BONUS_MINI_50K, 15},
+    {LA_BONUS_MINI_3K, 16},
+    {LA_BONUS_MINI_9K, 16},
+    {LA_BONUS_MINI_2K, 17},
+    {LA_BONUS_MINI_10K, 17},
+    {LA_BONUS_MINI_1K, 18},
+    {LA_SAUCER_ARROW_2X, 19},
+    {LA_SAUCER_ARROW_3X, 19},
+    {LA_SAUCER_10K, 20},
+    {LA_SAUCER_20K, 21},
+    {LA_SAUCER_30K, 22},
+    {LA_SAUCER_XBALL, 23}
+};
+
+#define NUM_OF_ATTRACT_LAMPS_DOWN 28
+struct AttractLampsDown {
+  byte lightNumDown;
+  byte rowDown;
+};
+struct AttractLampsDown AttractLampsDown[] = {
+    {LA_POP_TOP, 1},
+    {LA_STAR_SHOOTER_TOP, 1},
+    {LA_TARGET_UPPER_SPECIAL, 2},
+    {LA_TARGET_UPPER_COLLECT_BONUS, 3},
+    {LA_STAR_SHOOTER_MIDDLE, 3},
+    {LA_DTARGET_ARROW_1, 4},
+    {LA_DTARGET_ARROW_2, 5},
+    {LA_STAR_PFIELD_TOP, 5},
+    {LA_STAR_SHOOTER_BOTTOM, 5},
+    {LA_DTARGET_ARROW_3, 6},
+    {LA_DTARGET_BONUS_4X, 6},
+    {LA_STAR_PFIELD_BOTTOM, 7},
+    {LA_MING_TOP, 8},
+    {LA_MING_BOTTOM, 9},
+    {LA_SPINNER_LEFT, 10},
+    {LA_SPINNER_RIGHT, 11},
+    {LA_DTARGET_4_A, 12},
+    {LA_DTARGET_4_B, 13},
+    {LA_TARGET_WOOD_BEAST_XBALL, 14},
+    {LA_DTARGET_BONUS_5X, 14},
+    {LA_DTARGET_4_C, 15},
+    {LA_TARGET_LRIGHT_TOP, 16},
+    {LA_DTARGET_4_D, 17},
+    {LA_TARGET_LRIGHT_BOTTOM, 18},
+    {LA_INLANE_LEFT, 19},
+    {LA_INLANE_RIGHT, 19},
+    {LA_OUTLANE_LEFT_SPECIAL, 20},
+    {LA_OUTLANE_RIGHT_SPECIAL, 20}
+};
+
+#define NUM_OF_ATTRACT_LAMPS_SIREN 63
+struct AttractLampsSiren {
+  byte lightNumSiren;
+  byte rowSiren;
+};
+struct AttractLampsSiren AttractLampsSiren[] = {
+    {LA_POP_TOP, 1},
+    {LA_DTARGET_BONUS_4X, 2},
+    {LA_TARGET_UPPER_COLLECT_BONUS, 3},
+    {LA_TARGET_UPPER_SPECIAL, 4},
+    {LA_DTARGET_ARROW_1, 5},
+    {LA_DTARGET_ARROW_2, 6},
+    {LA_SAUCER_10K, 6},
+    {LA_DTARGET_ARROW_3, 7},
+    {LA_SAUCER_20K, 7},
+    {LA_SAUCER_30K, 8},
+    {LA_SAUCER_XBALL, 9},
+    {LA_MING_TOP, 10},
+    {LA_MING_BOTTOM, 11},
+    {LA_SPINNER_LEFT, 11},
+    {LA_DTARGET_4_A, 12},
+    {LA_DTARGET_4_B, 13},
+    {LA_DTARGET_4_C, 14},
+    {LA_DTARGET_BONUS_5X, 14},
+    {LA_DTARGET_4_D, 15},
+    {LA_SAUCER_ARROW_2X, 15},
+    {LA_OUTLANE_LEFT_SPECIAL, 16},
+    {LA_INLANE_LEFT, 16},
+    {LA_BONUS_MINI_8K, 17},
+    {LA_BONUS_MINI_9K, 17},
+    {LA_BONUS_MINI_10K, 17},
+    {LA_CLOCK_15_SECONDS_2X, 17},
+    {LA_BONUS_MINI_7K, 18},
+    {LA_BONUS_SUPER_8K, 18},
+    {LA_BONUS_SUPER_9K, 18},
+    {LA_BONUS_2X, 18},
+    {LA_BONUS_SUPER_7K, 19},
+    {LA_BONUS_SUPER_10K, 19},
+    {LA_BONUS_3X, 19},
+    {LA_BONUS_MINI_1K, 20},
+    {LA_BONUS_MINI_50K, 20},
+    {LA_BONUS_MINI_6K, 20},
+    {LA_BONUS_SUPER_1K, 20},
+    {LA_BONUS_SUPER_100K, 20},
+    {LA_BONUS_SUPER_6K, 20},
+    {LA_SHOOT_AGAIN, 20},
+    {LA_BONUS_SUPER_2K, 21},
+    {LA_BONUS_SUPER_5K, 21},
+    {LA_BONUS_4X, 21},
+    {LA_BONUS_MINI_5K, 22},
+    {LA_BONUS_SUPER_3K, 22},
+    {LA_BONUS_SUPER_4K, 22},
+    {LA_BONUS_5X, 22},
+    {LA_BONUS_MINI_2K, 23},
+    {LA_BONUS_MINI_3K, 23},
+    {LA_BONUS_MINI_4K, 23},
+    {LA_CLOCK_15_SECONDS_3X, 23},
+    {LA_INLANE_RIGHT, 24},
+    {LA_OUTLANE_RIGHT_SPECIAL, 24},
+    {LA_TARGET_LRIGHT_BOTTOM, 25},
+    {LA_TARGET_LRIGHT_TOP, 26},
+    {LA_TARGET_WOOD_BEAST_XBALL, 27},
+    {LA_SAUCER_ARROW_3X, 28},
+    {LA_SPINNER_RIGHT, 29},
+    {LA_STAR_PFIELD_BOTTOM, 30},
+    {LA_STAR_SHOOTER_BOTTOM, 31},
+    {LA_STAR_PFIELD_TOP, 32},
+    {LA_STAR_SHOOTER_MIDDLE, 32},
+    {LA_STAR_SHOOTER_TOP, 33}
+};
+
+#define NUM_OF_ATTRACT_LAMPS_MING_ATTACK 63
+struct AttractLampsMingAttack {
+  byte lightNumMingAttack;
+  byte rowMingAttack;
+};
+struct AttractLampsMingAttack AttractLampsMingAttack[] = {
+    {LA_DTARGET_ARROW_3, 1},
+    {LA_DTARGET_ARROW_2, 1},
+    {LA_DTARGET_BONUS_4X, 2},
+    {LA_DTARGET_ARROW_1, 2},
+    {LA_SAUCER_XBALL, 2},
+    {LA_SPINNER_LEFT, 2},
+    {LA_SAUCER_30K, 3},
+    {LA_TARGET_UPPER_COLLECT_BONUS, 3},
+    {LA_TARGET_UPPER_SPECIAL, 4},
+    {LA_SAUCER_20K, 4},
+    {LA_SAUCER_10K, 5},
+    {LA_DTARGET_4_A, 5},
+    {LA_POP_TOP, 6},
+    {LA_STAR_PFIELD_TOP, 6},
+    {LA_STAR_PFIELD_BOTTOM, 6},
+    {LA_SAUCER_ARROW_2X, 6},
+    {LA_SAUCER_ARROW_3X, 6},
+    {LA_DTARGET_4_B, 6},
+    {LA_STAR_SHOOTER_TOP, 7},
+    {LA_SPINNER_RIGHT, 7},
+    {LA_DTARGET_BONUS_5X, 7},
+    {LA_DTARGET_4_C, 7},
+    {LA_STAR_SHOOTER_MIDDLE, 8},
+    {LA_DTARGET_4_D, 8},
+    {LA_BONUS_MINI_1K, 8},
+    {LA_BONUS_MINI_10K, 8},
+    {LA_STAR_SHOOTER_BOTTOM, 9},
+    {LA_TARGET_WOOD_BEAST_XBALL, 9},
+    {LA_BONUS_MINI_2K, 9},
+    {LA_BONUS_MINI_9K, 9},
+    {LA_TARGET_LRIGHT_TOP, 10},
+    {LA_BONUS_MINI_3K, 10},
+    {LA_BONUS_MINI_8K, 10},
+    {LA_BONUS_MINI_50K, 10},
+    {LA_TARGET_LRIGHT_BOTTOM, 11},
+    {LA_BONUS_MINI_4K, 11},
+    {LA_BONUS_MINI_5K, 11},
+    {LA_BONUS_MINI_6K, 11},
+    {LA_BONUS_MINI_7K, 11},
+    {LA_INLANE_LEFT, 11},
+    {LA_CLOCK_15_SECONDS_2X, 12},
+    {LA_CLOCK_15_SECONDS_3X, 13},
+    {LA_OUTLANE_LEFT_SPECIAL, 13},
+    {LA_BONUS_SUPER_1K, 13},
+    {LA_BONUS_SUPER_2K, 13},
+    {LA_BONUS_SUPER_10K, 13},
+    {LA_INLANE_RIGHT, 14},
+    {LA_BONUS_SUPER_3K, 14},
+    {LA_BONUS_SUPER_8K, 14},
+    {LA_BONUS_SUPER_9K, 14},
+    {LA_BONUS_SUPER_100K, 14},
+    {LA_OUTLANE_RIGHT_SPECIAL, 15},
+    {LA_BONUS_SUPER_4K, 15},
+    {LA_BONUS_SUPER_7K, 15},
+    {LA_BONUS_SUPER_5K, 16},
+    {LA_BONUS_SUPER_6K, 16},
+    {LA_BONUS_2X, 16},
+    {LA_BONUS_4X, 17},
+    {LA_BONUS_3X, 18},
+    {LA_BONUS_5X, 19}
+};
+
+
+#define NUM_OF_SWITCHES             39 // 40 with one not used
+
+#define SW_STARS_PFIELD             0 // 2 LEFT & RIGHT R.O. BUTTONS
+#define SW_STARS_SHOOTER_LANE       1 // 3 SHOOTER LANE R.0. BUTTONS
+#define SW_DTARGET_1                2 // TOP SINGLE DROP TARGET
+#define SW_SHOOTER_LANE_ROLL        3 // SHOOTER LANE ROLLOVER
+#define SW_DTARGET_REBOUND          4 // DROP TARGET 50 PPOINT REB. (2)
+#define SW_CREDIT_BUTTON            5 // CREDIT BBUTTON
+#define SW_TILT                     6 // TILT (3)
+#define SW_OUTHOLE                  7 // OUTHOLE
+#define SW_COIN_3                   8 // COIN III (RIGHT)
+#define SW_COIN_1                   9 // COIN I (LEFT)
+#define SW_COIN_2                   10 // COIN II (CENTER)
+#define SW_TARGET_LRIGHT_BOTTOM     11 // LOWER RIGHT SIDE TARGET
+#define SW_INLANE_R                 12 // FLIP FEED LANE (RIGHT)
+#define SW_INLANE_L                 13 // FLIP FEED LANE (LEFT)
+#define SW_TARGET_LRIGHT_TOP        14 // UPPER RIGHT SIDE TARGET
+#define SW_SLAM                     15 // SLAM (2)
+#define SW_DTARGET_4_D              16 // 4 DROP TARGET "A" (BOTTOM)
+#define SW_DTARGET_4_C              17 // 4 DROP TARGET "B"
+#define SW_DTARGET_4_B              18 // 4 DROP TARGET "C"
+#define SW_DTARGET_4_A              19 // 4 DROP TARGET "D" (TOP)
+#define SW_DTARGET_3_A              20 // 1 DROP TARGET (TOP)
+#define SW_DTARGET_3_B              21 // 2 DROP TARGET (MIDDLE)
+#define SW_DTARGET_3_C              22 // 3 DROP TARGET (BOTTOM)
+#define SW_TARGET_TOP               23 // TOP TARGGET
+#define SW_DTARGET_INLINE_1ST       24 // 1ST INLINE DROP TARGET
+#define SW_DTARGET_INLINE_2ND       25 // 2ND INLINE DROP TARGET
+#define SW_DTARGET_INLINE_3RD       26 // 3RD INLINE DROP TARGET
+#define SW_TARGET_WOOD_BEAST        27 // INLINE BACK TARGET
+#define SW_REBOUND                  28 // 10 POINT REBOUND (2)
+#define SW_SAUCER                   29 // SAUCER
+#define SW_OUTLANE_RIGHT            30 // RIGHT OUTLANE
+#define SW_OUTLANE_LEFT             31 // LEFT OUTLANE
+#define SW_SPINNER_RIGHT            32 // RIGHT SPINNER
+#define SW_SPINNER_LEFT             33 // LEFT SPINNER
+#define SW_SLING_RIGHT              34 // RIGHT SLINGSHOT
+#define SW_SLING_LEFT               35 // LEFT SLINGSHOT
+#define SW_POP_TOP                  36 // TOP THUMPER BUMPER
+// #define N/A                      37 // not used
+#define SW_POP_RIGHT                38 // RIGHT THUMPER BUMPER
+#define SW_POP_LEFT                 39 // LEFT THUMPER BUMPER
+
+
+// Defines for solenoids
+#define SO_DTARGET_4_RESET          0 // 4 DROP TARGET
+#define SO_DTARGET_3_RESET          1 // 3 DROP TARGET
+#define SO_DTARGET_INLINE_RESET     2 // INLINE DROP TARGET
+#define SO_SAUCER_DOWN              3 // SAUCER KICK DOWN
+#define SO_KNOCKER                  5 // KNOCKER
+// #define N/A                      4 // not used
+#define SO_OUTHOLE                  6 // OUTHOLE KICKER
+#define SO_SAUCER_UP                7 // SAUCER KICK UP
+#define SO_DTARGET_1_RESET          8 // SINGLE DROP TARGET RESET
+#define SO_POP_LEFT                 9 // LEFT THUMPER BUMPER
+#define SO_POP_RIGHT                10 // RIGHT THUMPER BBUMPER
+#define SO_DTARGET_1_DOWN           11 // SINGLE DROP TARGET PULL DOWN
+#define SO_POP_TOP                  12 // TOP THUMPER BUMPER
+#define SO_SLING_LEFT               13 // LEFT SLINGSHOT
+#define SO_SLING_RIGHT              14 // RIGHT SLINGSHOT
+// #define SO_COIN_LOCKOUT          ?? // COIN LOCKOUT DOOR
+// #define SO_FLIPPER_ENABLE        ?? // KI RELAY (FLIPPER ENAMBLE)
+// #define N/A                      ?? // not used
+// #define N/A                      ?? // not used
+
+
+// SWITCHES_WITH_TRIGGERS are for switches that will automatically
+// activate a solenoid (like in the case of a chime that rings on a rollover)
+// but SWITCHES_WITH_TRIGGERS are fully debounced before being activated
+#define NUM_SWITCHES_WITH_TRIGGERS 5
+
+// PRIORITY_SWITCHES_WITH_TRIGGERS are switches that trigger immediately
+// (like for pop bumpers or slings) - they are not debounced completely
+#define NUM_PRIORITY_SWITCHES_WITH_TRIGGERS 5
+
+
+// Define automatic solenoid triggers (switch, solenoid, number of 1/120ths of a second to fire)
+struct PlayfieldAndCabinetSwitch TriggeredSwitches[] = {
+  { SW_SLING_RIGHT, SO_SLING_RIGHT, 4},
+  { SW_SLING_LEFT, SO_SLING_LEFT, 4},
+  { SW_POP_RIGHT, SO_POP_RIGHT, 3},
+  { SW_POP_LEFT, SO_POP_LEFT, 3},
+  { SW_POP_TOP, SO_POP_TOP, 3}
+};
