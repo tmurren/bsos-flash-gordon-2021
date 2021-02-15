@@ -33,7 +33,7 @@
 * 25000 - wood beast target
 * 25000 - inlane "hurry up"
 * 30000 - saucer dtarget 3 goal
-* 50000 - lr target hurry up
+* 50000 - lower right target hurry up
 * 50000 - top target special
 
 * 1000 - wizard spinner
