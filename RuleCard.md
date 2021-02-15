@@ -28,13 +28,18 @@
 
 ### Large Scoring
 * 10000 - dtarget 1, dtarget inline, dtarget 3 lit, dtarget 4 lit, inlane lit, lr target lit, saucer dtarget 4 goal
+* 10000 - bottom  skill shot
 * 15000 - dtarget 3 completion, dtarget 4 completion
 * 20000 - saucer dtarget inline goal
 * 25000 - wood beast target
 * 25000 - inlane "hurry up"
+* 25000 - middle skill shot
 * 30000 - saucer dtarget 3 goal
 * 50000 - lower right target hurry up
 * 50000 - top target special
+* 50000 - top skill shot
+* 50000 - mini-bonus
+* 100000 - super-bonus
 
 * 1000 - wizard spinner
 * 2200 - wizard pop bumper
