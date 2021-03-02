@@ -4,7 +4,7 @@
 * Dropping inline targets lites bonus multiplier 2X and 3X, and lights extra ball at Wood Beast target.
 * Dropping 1-2-3 targets 1st time lites top pop bumper. 2nd and 3rd time lites and advances top target for collect mini ring bonus and special. Also, lites 4X after 3X is lit.
 * Lighting 1-2-3 flashing arrows lites mini-bonus for 50,000 and saucer for 2X.
-* Dropping 4 targets 1st time lites left spinner. Also, lites 5X after 4x is lit.
+* Dropping 4 targets 1st time lites left spinner. and the 2nd ttime lites right spinner. Also, lites 5X after 4x is lit.
 * Lighting flashing amber, yellow, blue, and white inserts next to the 4 drop targets, 2 right targets, and flipper return lanes lites super-bonus for 100,000 and saucer 3X.
 * Ball shooter lane rollover scores super ring bonus when single target is dropped.
 * Super-bonus and mini-bonus scores are collected in outhole only.
@@ -14,8 +14,7 @@
 
 ### New Rules
 * Skill Shot: Plunge to hit shooter lane star rollovers without entering playfield, and return to plunger. Higher rollovers score more points.
-* Dropping inline targets lites right spinner, and Wood Beast target resets inline targets.
-* Lighting blue or white inserts next to 4 drop targets lites corresponding flipper return inserts.
+* Wood Beast target resets inline targets.
 * Lighting white and amber inserts next to 4 drop targets starts 15 second hurry at corresponding right targets.
 * Completing drop target banks light corresponding saucer inserts (4 bank - 10k, inline - 20k, and 3 bank * 30k). If Wood Beast extra ball has already been collected, light all three saucer inserts to light extra ball at saucer. Saucer always collects any and all awards available.
 * Drop 16 targets to light outlane specials for wizard mode.
@@ -28,19 +27,20 @@
 
 ### Large Scoring
 * 10000 - dtarget 1, dtarget inline, dtarget 3 lit, dtarget 4 lit, inlane lit, lr target lit, saucer dtarget 4 goal
-* 10000 - bottom  skill shot
-* 15000 - dtarget 3 completion, dtarget 4 completion
+* 15000 - dtarget 3 completion, dtarget 4 completion, bottom skill shot
 * 20000 - saucer dtarget inline goal
 * 25000 - wood beast target
 * 25000 - inlane "hurry up"
-* 25000 - middle skill shot
+* 30000 - middle skill shot
 * 30000 - saucer dtarget 3 goal
 * 50000 - lower right target hurry up
 * 50000 - top target special
-* 50000 - top skill shot
 * 50000 - mini-bonus
+* 75000 - top skill shot
 * 100000 - super-bonus
 
+
+### Wizard Scoring
 * 1000 - wizard spinner
 * 2200 - wizard pop bumper
 * 50000 - wizard start

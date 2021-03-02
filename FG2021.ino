@@ -1,6 +1,6 @@
 /**************************************************************************
   BSOS FILES: 42% 53% 530 lines
-  FG2021 FILES: 80% 65% 24624 lines (???% of available space)
+  FG2021 FILES: 81% 65% 24624 lines (???% of available space)
   
   This file is part of Flash Gordon 2021.
 
@@ -47,9 +47,9 @@ unsigned long InitGameStartTime = 0;
 unsigned long HighScore = 0;
 byte WholeCredit = 0;
 byte Credits = 0;
-byte MaxCredits = 25;
+#define MaxCredits 25 // byte
 boolean FreePlay = true;
-byte BallsPerGame = 3;
+#define BallsPerGame 3 // byte
 
 unsigned long AttractStartAnimation = 0;
 byte AttractHeadMode = 255;
@@ -65,13 +65,13 @@ byte CurrentNumPlayers = 0;
 unsigned long CurrentScores[4];
 
 byte NumTiltWarnings = 0;
-byte MaxTiltWarnings = 1;
+#define MaxTiltWarnings 1 // byte
 
 byte SkillShotHits = 0;
 byte SkillShotState = 0; // 0 not started, 1 started, 2 collecting, 3 collected/fail
 unsigned long SkillShotScoreAnimation = 0;
 
-const int TimeToWaitForBall = 1000;
+#define TimeToWaitForBall 1000 // const int
 unsigned long BallTimeInTrough = 0;
 unsigned long BallFirstSwitchHitTime = 0;
 boolean PFValidated = false;
@@ -121,10 +121,10 @@ byte Playfield3xState = 0; // ^
 unsigned long Playfield2XStart = 0;
 unsigned long Playfield3XStart = 0;
 
-const int MaxMiniBonus = 19;
-const int MaxMiniDisplayBonus = 19;
-const int MaxSuperBonus = 19;
-const int MaxSuperDisplayBonus = 19;
+#define MaxMiniBonus 19 // const int
+#define MaxMiniDisplayBonus 19 // const int
+#define MaxSuperBonus 19 // const int
+#define MaxSuperDisplayBonus 19 // const int
 byte MiniBonus;
 byte SuperBonus;
 boolean Super100kCollected = false;
@@ -390,7 +390,7 @@ int RunAttractMode(int curState, boolean curStateChanged) {
     if (DEBUG_MESSAGES) {
       Serial.println(F("Entering Attract Mode"));
     }
-    for (byte count=0; count<4; count++) {
+    for (byte count=0; count<5; count++) {
       BSOS_SetDisplayBlank(count, 0x00);
     }
     if (!FreePlay) {
@@ -527,7 +527,8 @@ int RunAttractMode(int curState, boolean curStateChanged) {
         if (!FreePlay) {
           BSOS_SetDisplayCredits(Credits, true);
         }
-      } else if (switchHit==SW_COIN_3) {
+      }
+      if (switchHit==SW_COIN_3) {
         AddCredit(2);
         if (!FreePlay) {
           BSOS_SetDisplayCredits(Credits, true);
@@ -551,6 +552,7 @@ int RunAttractMode(int curState, boolean curStateChanged) {
 
   return returnState;
 }
+
 
 
 int NormalGamePlay(boolean curStateChanged) {
@@ -900,7 +902,6 @@ int NormalGamePlay(boolean curStateChanged) {
 }
 
 
-// unsigned long AttractStartAnimation = 0;
 unsigned long InitGamePlayAnimation = 0;
 int InitGamePlay(boolean curStateChanged) {
   int returnState = MACHINE_STATE_INIT_GAMEPLAY;
@@ -1097,11 +1098,11 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
                 SkillShotScoreAnimation = CurrentTime+500;
                 SkillShotState = 2;
                 if (SkillShotHits==1 || SkillShotHits==2) {
-                  CurrentScores[CurrentPlayer] += 10000;
+                  CurrentScores[CurrentPlayer] += 15000; // 10000
                 } else if (SkillShotHits==3 || SkillShotHits==4) {
-                  CurrentScores[CurrentPlayer] += 25000;
+                  CurrentScores[CurrentPlayer] += 30000; // 25000
                 } else if (SkillShotHits==5) {
-                  CurrentScores[CurrentPlayer] += 50000;
+                  CurrentScores[CurrentPlayer] += 75000; // 50000
                 }
               }
             }
@@ -1287,10 +1288,15 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
             }
             if (CheckIfDTargets4Down()) {
               AddToScore(15000);
-              LeftSpinnerLit = true;
+              if (LeftSpinnerLit==false) {
+                LeftSpinnerLit = true;
+                BSOS_SetLampState(LA_SPINNER_LEFT, 1);
+              } else {
+                RightSpinnerLit = true;
+                BSOS_SetLampState(LA_SPINNER_RIGHT, 1);
+              }
               DTarget4Goal = true;
               BSOS_SetLampState(LA_SAUCER_10K, 1);
-              BSOS_SetLampState(LA_SPINNER_LEFT, 1);
               CheckSaucerDTargetGoal();
               if (BonusXState==4) {
                 BonusXState = 5;
@@ -1448,9 +1454,9 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
           if (curState!=MACHINE_STATE_WIZARD_MODE) {
             AddToScore(10000);
             DTargetInlineGoal = true;
-            RightSpinnerLit = true;
+            // RightSpinnerLit = true;
+            // BSOS_SetLampState(LA_SPINNER_RIGHT, 1);
             BSOS_SetLampState(LA_SAUCER_20K, 1);
-            BSOS_SetLampState(LA_SPINNER_RIGHT, 1);
             CheckSaucerDTargetGoal();
             if (WoodBeastXBallState[CurrentPlayer]==0) {
               WoodBeastXBallState[CurrentPlayer] = 1;
@@ -2110,7 +2116,7 @@ int CountdownBonus(boolean curStateChanged) {
     BonusCountDownEndTime = 0xFFFFFFFF;
   }
 
-  if ((CurrentTime-LastCountdownReportTime)>300) { // adjust speed 300
+  if ((CurrentTime-LastCountdownReportTime)>100) { // adjust speed 300
 
     if (MiniBonus>0) {
       if (BonusXState==1) {
