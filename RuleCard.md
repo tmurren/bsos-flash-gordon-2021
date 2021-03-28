@@ -20,8 +20,8 @@
 * Drop 16 targets to light outlane specials for wizard mode.
 
 ### Wizard Mode - Defeat Emperor Ming
-* Shoot spinners for 1 attack power per spin, and pop bumpers for 22 attack power per pop
-* Build attack power to 152 and light saucer to attack Emperor Ming.
+* Shoot spinners for 1 attack power per spin, pop bumpers for 20 attack power per pop, and the saucer for 35 attack power
+* Build attack power to 140 and light saucer to attack Emperor Ming.
 * Defeat Emperor Ming by attacking three times.
 
 
@@ -42,7 +42,8 @@
 
 ### Wizard Scoring
 * 1000 - wizard spinner
-* 2200 - wizard pop bumper
+* 2000 - wizard pop bumper
+* 3500 - wizard saucer
 * 50000 - wizard start
 * 50000 - wizard ming attack
 * 150000 - wizard ming kill
