@@ -2355,7 +2355,7 @@ int WizardMode(boolean curStateChanged) {
     AddToScore(50000);
     BSOS_TurnOffAllLamps();
     if (NIGHT_TESTING) {
-      // BSOS_PushToTimedSolenoidStack(SO_DTARGET_1_DOWN, 15, CurrentTime);
+      BSOS_PushToTimedSolenoidStack(SO_DTARGET_1_DOWN, 15, CurrentTime);
     }
     BSOS_SetLampState(LA_OUTLANE_RIGHT_SPECIAL, 1);
     BSOS_SetLampState(LA_OUTLANE_LEFT_SPECIAL, 1);
@@ -2369,10 +2369,10 @@ int WizardMode(boolean curStateChanged) {
       BSOS_SetLampState(LA_SHOOT_AGAIN, 1);
     }
     if (NIGHT_TESTING) {
-      // BSOS_PushToTimedSolenoidStack(SO_DTARGET_4_RESET, 15, CurrentTime);
-      // BSOS_PushToTimedSolenoidStack(SO_DTARGET_3_RESET, 15, CurrentTime + 250);
-      // BSOS_PushToTimedSolenoidStack(SO_DTARGET_INLINE_RESET, 15, CurrentTime + 500);
-      // BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 3000);
+      BSOS_PushToTimedSolenoidStack(SO_DTARGET_4_RESET, 15, CurrentTime);
+      BSOS_PushToTimedSolenoidStack(SO_DTARGET_3_RESET, 15, CurrentTime + 250);
+      BSOS_PushToTimedSolenoidStack(SO_DTARGET_INLINE_RESET, 15, CurrentTime + 500);
+      BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 3000);
     }
   }
 
