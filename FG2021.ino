@@ -2575,6 +2575,7 @@ int WizardMode(boolean curStateChanged) {
           returnState = MACHINE_STATE_BALL_OVER;
         } else if (NumTiltWarnings<MaxTiltWarnings) {
           if (WizardState==3) {
+            BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 3000);
             returnState = MACHINE_STATE_WIZARD_MODE;
           } else if (WizardState>=4) {
             returnState = MACHINE_STATE_BALL_OVER;
