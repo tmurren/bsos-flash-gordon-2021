@@ -2372,7 +2372,7 @@ int WizardMode(boolean curStateChanged) {
       BSOS_PushToTimedSolenoidStack(SO_DTARGET_4_RESET, 15, CurrentTime);
       BSOS_PushToTimedSolenoidStack(SO_DTARGET_3_RESET, 15, CurrentTime + 250);
       BSOS_PushToTimedSolenoidStack(SO_DTARGET_INLINE_RESET, 15, CurrentTime + 500);
-      BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 3000);
+      BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 100);
     }
   }
 
@@ -2575,7 +2575,6 @@ int WizardMode(boolean curStateChanged) {
           returnState = MACHINE_STATE_BALL_OVER;
         } else if (NumTiltWarnings<MaxTiltWarnings) {
           if (WizardState==3) {
-            BSOS_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 3000);
             returnState = MACHINE_STATE_WIZARD_MODE;
           } else if (WizardState>=4) {
             returnState = MACHINE_STATE_BALL_OVER;
