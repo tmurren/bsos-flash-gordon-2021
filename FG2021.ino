@@ -1065,7 +1065,6 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
             AddToScore(1000);
             AddToMiniBonus(1);
             if (curState==MACHINE_STATE_SKILL_SHOT) {
-              BSOS_PlaySoundSquawkAndTalk(17);
               SkillShotState = 3;
             }
           } else {
