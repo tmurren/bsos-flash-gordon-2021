@@ -1186,46 +1186,44 @@ void BSOS_CycleAllDisplays(unsigned long curTime, byte digitNum) {
 #ifdef BALLY_STERN_OS_USE_SQUAWK_AND_TALK
 void BSOS_PlaySoundSquawkAndTalk(byte soundByte) {
 
-  byte oldSolenoidControlByte, soundControlByte;
+  byte oldSolenoidControlByte, soundLowerNibble, soundUpperNibble;
 
   // mask further zero-crossing interrupts during this 
-  InsideZeroCrossingInterrupt += 1;
+  noInterrupts();
 
-  // Get the current value of U11:PortB
+  // Get the current value of U11:PortB - current solenoids
   oldSolenoidControlByte = BSOS_DataRead(ADDRESS_U11_B);
-  soundControlByte = oldSolenoidControlByte; 
-
-  // Mask off momentary solenoids
-  soundControlByte &= 0xF0;
-  // Add in lower nibble
-  soundControlByte |= (soundByte&0x0F);
+  soundLowerNibble = (oldSolenoidControlByte&0xF0) | (soundByte&0x0F); 
+  soundUpperNibble = (oldSolenoidControlByte&0xF0) | (soundByte/16); 
 
   // Put 1s on momentary solenoid lines
   BSOS_DataWrite(ADDRESS_U11_B, oldSolenoidControlByte | 0x0F);
 
-  // Strobe sound latch
-  BSOS_DataWrite(ADDRESS_U11_B_CONTROL, BSOS_DataRead(ADDRESS_U11_B_CONTROL)|0x04);
+  // Put sound latch low
+  BSOS_DataWrite(ADDRESS_U11_B_CONTROL, 0x34);
 
-  // put the new byte on U11:PortB
-  BSOS_DataWrite(ADDRESS_U11_B, soundControlByte);
+  // Let the strobe stay low for a moment
+  delayMicroseconds(32);
 
-  // wait 200 microseconds
-  delayMicroseconds(142);
+  // Put sound latch high
+  BSOS_DataWrite(ADDRESS_U11_B_CONTROL, 0x3C);
 
-  // remove lower nibble
-  soundControlByte &= 0xF0;
-  // Put upper nibble on lines
-  soundControlByte |= (soundByte/16);
-  // put the new byte on U11:PortB
-  BSOS_DataWrite(ADDRESS_U11_B, soundControlByte);
+  // put the new byte on U11:PortB (the lower nibble is currently loaded)
+  BSOS_DataWrite(ADDRESS_U11_B, soundLowerNibble);
 
-  // wait 200 microseconds
-  delayMicroseconds(78);
+  // wait 138 microseconds
+  delayMicroseconds(138);
 
-  // Turn off sound latch
-  BSOS_DataWrite(ADDRESS_U11_B_CONTROL, BSOS_DataRead(ADDRESS_U11_B_CONTROL)&0xF7);
+  // put the new byte on U11:PortB (the uppper nibble is currently loaded)
+  BSOS_DataWrite(ADDRESS_U11_B, soundUpperNibble);
 
-  InsideZeroCrossingInterrupt -= 1;
+  // wait 76 microseconds
+  delayMicroseconds(76);
+
+  // Restore the original solenoid byte
+  BSOS_DataWrite(ADDRESS_U11_B, oldSolenoidControlByte);
+
+  interrupts();
 }
 #endif
 
