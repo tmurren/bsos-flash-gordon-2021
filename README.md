@@ -5,6 +5,3 @@ Reimagined rules for Bally's 1981 Flash Gordon pinball machine. Based on the Bal
 * Download the zip file (Code > Download ZIP) or clone the repository to your hard drive.  
 * Unzip the FG2021 repository and name the folder that it's in as: FG2021  
 * Open the FG2021.ino in Arduino's IDE
-
-### Notes
-* Sound has yet to be implemented
