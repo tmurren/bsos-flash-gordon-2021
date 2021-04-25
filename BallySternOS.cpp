@@ -1218,10 +1218,13 @@ void BSOS_PlaySoundSquawkAndTalk(byte soundByte) {
   BSOS_DataWrite(ADDRESS_U11_B, soundUpperNibble);
 
   // wait 76 microseconds
-  delayMicroseconds(76);
+  delayMicroseconds(145);
 
   // Restore the original solenoid byte
   BSOS_DataWrite(ADDRESS_U11_B, oldSolenoidControlByte);
+
+  // Put sound latch low
+  BSOS_DataWrite(ADDRESS_U11_B_CONTROL, 0x34);
 
   interrupts();
 }
