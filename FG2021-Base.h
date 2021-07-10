@@ -339,7 +339,7 @@ struct AttractLampsSiren AttractLampsSiren[] = {
     {LA_STAR_SHOOTER_TOP, 33}
 };
 
-#define NUM_OF_ATTRACT_LAMPS_MING_ATTACK 63
+#define NUM_OF_ATTRACT_LAMPS_MING_ATTACK 60
 struct AttractLampsMingAttack {
   byte lightNumMingAttack;
   byte rowMingAttack;
