@@ -235,7 +235,7 @@ void AddCredit(byte numToAdd=1) {
 
 boolean AddPlayer(boolean resetNumPlayers = false) {
   if (Credits<1 && !FreePlay) return false;
-  if (resetNumPlayers>=4) return false;
+  if (resetNumPlayers) CurrentNumPlayers = 0;
   if (CurrentNumPlayers>=4) return false;
 
   CurrentNumPlayers += 1;
@@ -251,7 +251,7 @@ boolean AddPlayer(boolean resetNumPlayers = false) {
 }
 
 
-int InitNewBall(bool curStateChanged, byte playerNum, int ballNum) {
+int InitNewBall(bool curStateChanged, int ballNum) {
 
   if (curStateChanged) {
     BSOS_TurnOffAllLamps();
@@ -298,9 +298,7 @@ int InitNewBall(bool curStateChanged, byte playerNum, int ballNum) {
     } else if (WoodBeastXBallState[CurrentPlayer]==1) {
       WoodBeastXBallState[CurrentPlayer] = 0;
     }
-    if (SacuerXBallState[CurrentPlayer]==2) {
-      SacuerXBallState[CurrentPlayer]==3;
-    } else if (SacuerXBallState[CurrentPlayer]==1) {
+    if (SacuerXBallState[CurrentPlayer]==1) {
       SacuerXBallState[CurrentPlayer] = 0;
     }
 
@@ -550,8 +548,8 @@ int NormalGamePlay(boolean curStateChanged) {
     BSOS_SetLampState(LA_STAR_SHOOTER_TOP, 0);
     BSOS_SetLampState(LA_STAR_PFIELD_TOP, 0);
     BSOS_SetLampState(LA_STAR_PFIELD_BOTTOM, 0);
-    BSOS_SetLampState(LA_MING_TOP, 0);
-    BSOS_SetLampState(LA_MING_BOTTOM, 0);
+    BSOS_SetLampState(LA_MING_TOP, 1);
+    BSOS_SetLampState(LA_MING_BOTTOM, 1);
     if (PFValidated==true) {
       if (NIGHT_TESTING) BSOS_PushToSolenoidStack(SO_DTARGET_1_RESET, 5, true);
     }
@@ -669,7 +667,6 @@ int NormalGamePlay(boolean curStateChanged) {
         DTarget3Flashing = DTarget3ToLight;
       }
       lamp3PhaseIncrement++;
-      if (lamp3PhaseIncrement<0) lamp3PhaseIncrement = 3;
     }
   }
 
@@ -777,7 +774,7 @@ int NormalGamePlay(boolean curStateChanged) {
   if (CurrentTime>=InlaneRightBlip && (DTarget4Light[2]==0 || DTarget4Light[2]==1)) {
     BSOS_SetLampState(LA_INLANE_RIGHT, 0);
   }
-  if (CurrentTime>=TargetUpperBlip && TopSpecialLit==false & MiniBonusReady==false) {
+  if (CurrentTime>=TargetUpperBlip && TopSpecialLit==false && MiniBonusReady==false) {
     BSOS_SetLampState(LA_TARGET_UPPER_SPECIAL, 0);
     BSOS_SetLampState(LA_TARGET_UPPER_COLLECT_BONUS, 0);
   }
@@ -1001,7 +998,7 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
   if (curState==MACHINE_STATE_INIT_GAMEPLAY) {
     returnState = InitGamePlay(curStateChanged);
   } else if (curState==MACHINE_STATE_INIT_NEW_BALL) {
-    returnState = InitNewBall(curStateChanged, CurrentPlayer, CurrentBallInPlay);
+    returnState = InitNewBall(curStateChanged, CurrentBallInPlay);
   } else if (curState==MACHINE_STATE_SKILL_SHOT) {
     returnState = SkillShot(curStateChanged);
   } else if (curState==MACHINE_STATE_NORMAL_GAMEPLAY) {
@@ -1772,9 +1769,14 @@ void loop() {
   int newMachineState = MachineState;
 
   // Machine state is self-test/attract/game play
-  if (MachineState<0) {
-    newMachineState = RunSelfTest(MachineState, MachineStateChanged);
-  } else if (MachineState==MACHINE_STATE_ATTRACT) {
+  // if (MachineState<0) {
+  //   newMachineState = RunSelfTest(MachineState, MachineStateChanged);
+  // } else if (MachineState==MACHINE_STATE_ATTRACT) {
+  //   newMachineState = RunAttractMode(MachineState, MachineStateChanged);
+  // } else {
+  //   newMachineState = RunGamePlayMode(MachineState, MachineStateChanged);
+  // }
+  if (MachineState==MACHINE_STATE_ATTRACT) {
     newMachineState = RunAttractMode(MachineState, MachineStateChanged);
   } else {
     newMachineState = RunGamePlayMode(MachineState, MachineStateChanged);
@@ -1840,7 +1842,6 @@ void AttractRetro() {
   // bonus
   byte attractBonus;
   for (attractBonus=0; attractBonus<10; attractBonus++){
-    if (attractBonus<0 || attractBonus>9) return;
     if ( attractBonus % 2 == 0) { // even but odd on pf
       BSOS_SetLampState(LA_BONUS_MINI_1K+attractBonus, 1, 0, 100);
       BSOS_SetLampState(LA_BONUS_SUPER_1K+attractBonus, 1, 0, 100);
@@ -2267,10 +2268,10 @@ int ShowMatchSequence(boolean curStateChanged) {
     BSOS_SetLampState(LA_BALL_IN_PLAY, 0);
     
     unsigned long highestScore = 0;
-    int highScorePlayerNum = 0;
+    // int highScorePlayerNum = 0;
     for (byte count=0; count<CurrentNumPlayers; count++) {
       if (CurrentScores[count]>highestScore) highestScore = CurrentScores[count];
-      highScorePlayerNum = count;
+      // highScorePlayerNum = count;
     }
     if (highestScore>HighScore) {
       HighScore = highestScore;
@@ -2386,14 +2387,14 @@ int WizardMode(boolean curStateChanged) {
 
   // handle lamps
   if (WizardState==4) {
-    if (MingAttackProgress>=0 && MingAttackProgress<=33) {
+    if ((MingAttackProgress==0) || (MingAttackProgress<=33)) {
       BSOS_SetLampState(LA_FLASH_GORDON_5, 0);
       BSOS_SetLampState(LA_FLASH_GORDON_2, 0);
       BSOS_SetLampState(LA_FLASH_GORDON_4, 0);
       BSOS_SetLampState(LA_FLASH_GORDON_3, 0);
       BSOS_SetLampState(LA_FLASH_STROBE, 0);
 
-      if (MingAttackProgress>=0 && MingAttackProgress<=11) {
+      if ((MingAttackProgress==0) || (MingAttackProgress<=11)) {
         if (MingHealth!=0) {
           BSOS_SetLampState(LA_SAUCER_10K, 1, 0, 250);
           BSOS_SetLampState(LA_FLASH_GORDON_6, 1, 0, 250);
@@ -2403,7 +2404,7 @@ int WizardMode(boolean curStateChanged) {
         BSOS_SetLampState(LA_SAUCER_10K, 1, 0, 180);
         BSOS_SetLampState(LA_FLASH_GORDON_6, 1, 0, 180);
         BSOS_SetLampState(LA_FLASH_GORDON_1, 1, 0, 180);
-      } else if (MingAttackProgress>=23 && MingAttackProgress<=34) {
+      } else if (MingAttackProgress>=23 && MingAttackProgress<=33) {
         BSOS_SetLampState(LA_SAUCER_10K, 1, 0, 110);
         BSOS_SetLampState(LA_FLASH_GORDON_6, 1, 0, 110);
         BSOS_SetLampState(LA_FLASH_GORDON_1, 1, 0, 110);
@@ -2412,7 +2413,7 @@ int WizardMode(boolean curStateChanged) {
       BSOS_SetLampState(LA_SAUCER_10K, 1);
       BSOS_SetLampState(LA_FLASH_GORDON_6, 1);
       BSOS_SetLampState(LA_FLASH_GORDON_1, 1);
-      if (MingAttackProgress>=35 && MingAttackProgress<=46) {
+      if (MingAttackProgress>=34 && MingAttackProgress<=46) {
         BSOS_SetLampState(LA_SAUCER_20K, 1, 0, 250);
         BSOS_SetLampState(LA_FLASH_GORDON_5, 1, 0, 250);
         BSOS_SetLampState(LA_FLASH_GORDON_2, 1, 0, 250);
@@ -2510,7 +2511,6 @@ int WizardMode(boolean curStateChanged) {
         BSOS_SetDisableFlippers(true);
         byte bonusFireworks;
         for (bonusFireworks=0; bonusFireworks<10; bonusFireworks++){
-          if (bonusFireworks<0 || bonusFireworks>9) return;
           if ( bonusFireworks % 2 == 0) { // even but odd on pf
             BSOS_SetLampState(LA_BONUS_MINI_1K+bonusFireworks, 1, 0, 100);
             BSOS_SetLampState(LA_BONUS_SUPER_1K+bonusFireworks, 1, 0, 100);
