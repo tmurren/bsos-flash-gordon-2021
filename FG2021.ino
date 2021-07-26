@@ -2265,7 +2265,7 @@ int SkillShot(boolean curStateChanged) {
 
 void DropTargetHit() {
   DropTargetCount++;
-  if (DropTargetCount==16) {
+  if (DropTargetCount==8) {
     BSOS_SetLampState(LA_OUTLANE_RIGHT_SPECIAL, 1);
     BSOS_SetLampState(LA_OUTLANE_LEFT_SPECIAL, 1);
     BSOS_SetLampState(LA_MING_TOP, 1, 0, 100);
