@@ -1,6 +1,8 @@
 /**************************************************************************
  *     This file is part of the Bally/Stern OS for Arduino Project.
 
+    Flash Gordon 2021 Version: Version: 1.0.0
+
     I, Dick Hamill, the author of this program disclaim all copyright
     in order to make this program freely available in perpetuity to
     anyone who would like to use it. Dick Hamill, 6/1/2020

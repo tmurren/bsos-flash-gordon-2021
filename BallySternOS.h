@@ -1,6 +1,8 @@
 /**************************************************************************
  *     This file is part of the Bally/Stern OS for Arduino Project.
 
+    Flash Gordon 2021 Version: Version: 1.0.0
+
     I, Dick Hamill, the author of this program disclaim all copyright
     in order to make this program freely available in perpetuity to
     anyone who would like to use it. Dick Hamill, 6/1/2020
@@ -65,6 +67,12 @@ struct PlayfieldAndCabinetSwitch {
 // EEPROM Stuff
 #define BSOS_CREDITS_EEPROM_BYTE          5
 #define BSOS_HIGHSCORE_EEPROM_START_BYTE  1
+#define BSOS_TOTAL_PLAYS_EEPROM_BYTE      10
+#define BSOS_TOTAL_WIZ_EEPROM_BYTE        14
+#define BSOS_TOTAL_WIZ_BEAT_EEPROM_BYTE   18
+#define BSOS_TOTAL_SKILL_1_EEPROM_BYTE    22
+#define BSOS_TOTAL_SKILL_2_EEPROM_BYTE    26
+#define BSOS_TOTAL_SKILL_3_EEPROM_BYTE    30
 
 
 // Function Prototypes

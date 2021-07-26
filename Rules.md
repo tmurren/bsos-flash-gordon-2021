@@ -1,4 +1,18 @@
-# Flash Gordon 2021 Rule Card
+# Flash Gordon 2021 - Rule Card
+# Version 1.0.0
+
+### New Rules
+* Skill Shot: Plunge to hit shooter lane star rollovers without entering playfield, and return to plunger. Higher rollovers score more points.
+* Wizard Mode: Drop 16 targets to light wizard mode at the outlane special inserts.
+* Lighting white and amber inserts next to 4 drop targets starts 15 second hurry up at corresponding target on the right.
+* Collect blinking inlane to start quick hurry up at spinner (2000 a spin).
+* Wood Beast target resets inline targets.
+* Completing each drop target bank lights its corresponding saucer insert (4 bank - 10k, inline - 20k, and 3 bank - 30k). If Wood Beast extra ball has already been collected, light all three saucer inserts to light extra ball at saucer. Saucer always collects any and all awards available.
+
+### Wizard Mode - Defeat Emperor Ming
+* Shoot spinners for 1 attack power per spin, pop bumpers for 20 attack power per pop, and the saucer for 35 attack power
+* Build attack power to 140 and light saucer to attack Emperor Ming.
+* Defeat Emperor Ming by attacking three times.
 
 ### Carried Over Rules
 * Dropping inline targets lites bonus multiplier 2X and 3X, and lights extra ball at Wood Beast target.
@@ -11,18 +25,6 @@
 * Ball in saucer when 2X or 3X are lit lites 15 clock seconds to increase playfield scores 2X or 3X. When both are lit 5X value is scored.
 * Maximum - 1 extra ball per ball in play.
 * Tilt Penalty - Ball in play.
-
-### New Rules
-* Skill Shot: Plunge to hit shooter lane star rollovers without entering playfield, and return to plunger. Higher rollovers score more points.
-* Wood Beast target resets inline targets.
-* Lighting white and amber inserts next to 4 drop targets starts 15 second hurry at corresponding right targets.
-* Completing drop target banks light corresponding saucer inserts (4 bank - 10k, inline - 20k, and 3 bank * 30k). If Wood Beast extra ball has already been collected, light all three saucer inserts to light extra ball at saucer. Saucer always collects any and all awards available.
-* Drop 16 targets to light outlane specials for wizard mode.
-
-### Wizard Mode - Defeat Emperor Ming
-* Shoot spinners for 1 attack power per spin, pop bumpers for 20 attack power per pop, and the saucer for 35 attack power
-* Build attack power to 140 and light saucer to attack Emperor Ming.
-* Defeat Emperor Ming by attacking three times.
 
 
 ### Large Scoring
