@@ -250,11 +250,11 @@ int RunBaseSelfTest(int curState, boolean curStateChanged, unsigned long Current
 
 
 
-  // ########## TOTAL SKILL SHOT 1 ##########
+  // ########## TOTAL SKILL SHOTS ##########
   } else if (curState==MACHINE_STATE_TEST_TOTAL_SKILL) {
     if (curStateChanged) {
       BSOS_SetDisplayBlank(4, 0);
-      BSOS_SetDisplayBallInPlay(10);
+      BSOS_SetDisplayBallInPlay(8);
       SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_SKILL_1_EEPROM_BYTE);
       BSOS_SetDisplay(0, SavedValue, true);
       SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_SKILL_2_EEPROM_BYTE);
@@ -269,7 +269,7 @@ int RunBaseSelfTest(int curState, boolean curStateChanged, unsigned long Current
   } else if (curState==MACHINE_STATE_TEST_TOTAL_WIZ) {
     if (curStateChanged) {
       BSOS_SetDisplayBlank(4, 0);
-      BSOS_SetDisplayBallInPlay(8);
+      BSOS_SetDisplayBallInPlay(9);
       SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_WIZ_EEPROM_BYTE);
       BSOS_SetDisplay(0, SavedValue, true);
       SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_WIZ_BEAT_EEPROM_BYTE);
@@ -278,45 +278,14 @@ int RunBaseSelfTest(int curState, boolean curStateChanged, unsigned long Current
 
 
 
-  // // ########## TOTAL SKILL SHOT 2 ##########
-  // } else if (curState==MACHINE_STATE_TEST_TOTAL_SKILL_2) {
-  //   if (curStateChanged) {
-  //     BSOS_SetDisplayBlank(4, 0);
-  //     BSOS_SetDisplayBallInPlay(11);
-  //     SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_SKILL_2_EEPROM_BYTE);
-  //     BSOS_SetDisplay(0, SavedValue, true);
-  //   }
+  // // ########## CHUTE 1 COINS ##########
+  // } else if (curState==MACHINE_STATE_TEST_CHUTE_1_COINS) {
 
+  // // ########## CHUTE 2 COINS ##########
+  // } else if (curState==MACHINE_STATE_TEST_CHUTE_3_COINS) {
 
-
-  // // ########## TOTAL SKILL SHOT 3 ##########
-  // } else if (curState==MACHINE_STATE_TEST_TOTAL_SKILL_3) {
-  //   if (curStateChanged) {
-  //     BSOS_SetDisplayBlank(4, 0);
-  //     BSOS_SetDisplayBallInPlay(12);
-  //     SavedValue = BSOS_ReadULFromEEProm(BSOS_TOTAL_SKILL_3_EEPROM_BYTE);
-  //     BSOS_SetDisplay(0, SavedValue, true);
-  //   }
-
-
-
-  // // ########## CREDITS ##########
-  // } else if (curState==MACHINE_STATE_TEST_CREDITS) {
-  //   if (curStateChanged) {
-  //     BSOS_SetDisplay(0, SavedValue, true);
-  //   }
-  //   if (curSwitch==resetSwitch || resetDoubleClick) {
-  //     SavedValue += 1;
-  //     if (SavedValue>20) SavedValue = 0;
-  //     BSOS_SetDisplay(0, SavedValue, true);
-  //     BSOS_WriteByteToEEProm(BSOS_CREDITS_EEPROM_BYTE, SavedValue & 0x000000FF);
-  //   }
-
-  // // ########## TOTAL REPLAYS ##########
-  // } else if (curState==MACHINE_STATE_TEST_TOTAL_REPLAYS) {
-
-  // // ########## HIGHSCORES BEAT ##########
-  // } else if (curState==MACHINE_STATE_TEST_HISCR_BEAT) {
+  // // ########## CHUTE 3 COINS ##########
+  // } else if (curState==MACHINE_STATE_TEST_CHUTE_3_COINS) {
 
   // // ########## SCORE LEVEL 1 ##########
   // } else if (curState==MACHINE_STATE_TEST_SCORE_LEVEL_1) {
@@ -327,14 +296,12 @@ int RunBaseSelfTest(int curState, boolean curStateChanged, unsigned long Current
   // // ########## SCORE LEVEL 3 ##########
   // } else if (curState==MACHINE_STATE_TEST_SCORE_LEVEL_3) {
 
-  // // ########## CHUTE 2 COINS ##########
-  // } else if (curState==MACHINE_STATE_TEST_CHUTE_2_COINS) {
+  // // ########## TOTAL REPLAYS ##########
+  // } else if (curState==MACHINE_STATE_TEST_TOTAL_REPLAYS) {
 
-  // // ########## CHUTE 1 COINS ##########
-  // } else if (curState==MACHINE_STATE_TEST_CHUTE_1_COINS) {
+  // // ########## HIGHSCORES BEAT ##########
+  // } else if (curState==MACHINE_STATE_TEST_HISCR_BEAT) {
 
-  // // ########## CHUTE 2 COINS ##########
-  // } else if (curState==MACHINE_STATE_TEST_CHUTE_3_COINS) {
   }
 
 
