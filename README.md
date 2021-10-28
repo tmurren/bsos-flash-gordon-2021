@@ -11,7 +11,7 @@ If you are looking for the Arduino Mega 2560 version of the code, see here: http
 * Open FG2021.ino in Arduino's IDE and upload to microcontroller: Board - Arduino Nano, Processor - ATMega328P (maybe/maybe not old bootloader), Programmer - AVRISP mkII
 
 ### Operator game adjustments
-This section at the top of the FG2021.ino file groups some variables that the operator may want to adjust, including difficutly settings like balls per game, wizard mode drop target goal, and wizard mode attack power goal.
+This section at the top of the FG2021.ino file groups some variables that the operator may want to adjust, including difficulty settings like balls per game, wizard mode drop target goal, and wizard mode attack power goal.
 
 ### How to operate self test / audit
 - Coindoor button: Enters self test / audit mode and advances through sections
