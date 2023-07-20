@@ -33,11 +33,11 @@ boolean FreePlay = true;             // false = coin drop, true = free play
 #define WIZARD_GOAL_ATTACK 140       // (140) set attack power needed to light saucer in wizard mode
 #define ATTRACT_SPEECH 1             // 0 = no attract speech, 1 = attract speect "Emperor Ming awaits!"
 #define ATTRACT_SPEECH_TIMER 300000  // (300000) Ammount of time between attract mode speech callouts. 60000 = 1 minute
-#define USE_STROBE 0                 // Strobe use is currently not recommended. Please message me if you would like to help! 0 = don't use backglass strobe, 1 = use backglass strobe
+#define USE_STROBE 1                 // Strobe use is currently not recommended. Please message me if you would like to help! 0 = don't use backglass strobe, 1 = use backglass strobe
 #define DEBUG_MESSAGES  1            // 0 = no serial monitor, 1 = serial monitor for testing
 //=====================================================================================
 
-#define VERSION_NUMBER  110
+#define VERSION_NUMBER  120
 
 boolean FirstStartup = true;
 int MachineState = 0;
