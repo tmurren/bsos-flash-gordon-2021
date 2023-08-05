@@ -323,8 +323,9 @@ boolean AddPlayer(boolean resetNumPlayers = false) {
 int InitNewBall(bool curStateChanged, int ballNum) {
 
   if (curStateChanged) {
-    InitNewBallAnimation = CurrentTime+2058;
+    InitNewBallAnimation = CurrentTime+0;
     PlaySound(44); // ming awaits
+    PlaySound(6);
     RPU_TurnOffAllLamps();
     RPU_SetDisableFlippers(false);
     RPU_EnableSolenoidStack();
@@ -452,7 +453,6 @@ int InitNewBall(bool curStateChanged, int ballNum) {
   //   }
   // }
   if (CurrentTime>=InitNewBallAnimation) {
-    PlaySound(6);
     RPU_PushToTimedSolenoidStack(SO_OUTHOLE, 4, CurrentTime + 100);
     return MACHINE_STATE_SKILL_SHOT;
   } else {
