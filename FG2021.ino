@@ -31,13 +31,13 @@ boolean FreePlay = true;             // false = coin drop, true = free play
 #define BALLS_PER_GAME 3             // (3) balls per game
 #define WIZARD_GOAL_DTARGET 16       // (16) set number of drop targets needed to light wizard mode at outlanes
 #define WIZARD_GOAL_ATTACK 140       // (140) set attack power needed to light saucer in wizard mode
-#define ATTRACT_SPEECH 1             // 0 = no attract speech, 1 = attract speect "Emperor Ming awaits!"
+#define ATTRACT_SPEECH 0             // 0 = no attract speech, 1 = attract speect "Emperor Ming awaits!"
 #define ATTRACT_SPEECH_TIMER 300000  // (300000) Ammount of time between attract mode speech callouts. 60000 = 1 minute
 #define USE_STROBE 1                 // Strobe use is currently not recommended. Please message me if you would like to help! 0 = don't use backglass strobe, 1 = use backglass strobe
 #define DEBUG_MESSAGES  1            // 0 = no serial monitor, 1 = serial monitor for testing
 //=====================================================================================
 
-#define VERSION_NUMBER  120
+#define VERSION_NUMBER  124
 
 boolean FirstStartup = true;
 int MachineState = 0;
@@ -109,6 +109,7 @@ unsigned long BallFirstSwitchHitTime = 0;
 boolean PFValidated = false;
 boolean BallSaveUsed = false; // not used
 unsigned long BallSaveNumSeconds = 0; // not used
+unsigned long BallSaveNumLastFewSeconds = 0; // not used
 
 unsigned long InlaneLeftBlip = 0;
 unsigned long InlaneRightBlip = 0;
@@ -183,6 +184,7 @@ byte MatchDigit = 0;
 byte NumMatchSpins = 0;
 byte ScoreMatches = 0;
 
+boolean TurnOffBonusForWizardQualifier = false;
 byte WizardState = 0; // 0 unqualified, 1 qualified, 2 collected, 3 initball, 4 started, 5 validated, 6 ming defeated
 byte MingAttackProgress = 0;
 boolean MingAttackReady = false;
@@ -200,6 +202,7 @@ unsigned long CurrentSoundEffectTimer = 0;
 void setup() {
   if (DEBUG_MESSAGES) {
     Serial.begin(115200);
+    Serial.println("Opens SERIAL at 115,200 bps"); // prints a label
   }
 
   // read analog pin for match sequence
@@ -209,7 +212,7 @@ void setup() {
   RPU_SetupGameSwitches(NUM_SWITCHES_WITH_TRIGGERS, NUM_PRIORITY_SWITCHES_WITH_TRIGGERS, TriggeredSwitches);
 
   if (DEBUG_MESSAGES) {
-    Serial.write("Attempting to initialize the MPU\n");
+    Serial.println("Attempting to initialize the MPU\n");
   }
  
   // Set up the chips and interrupts
@@ -231,7 +234,7 @@ void setup() {
   RPU_SetDisplayBlank(2, 0x00);
   RPU_SetDisplayBlank(3, 0x00);
 
-  delay(4000);
+  delay(4000); // 4 seconds
 
   Credits = RPU_ReadByteFromEEProm(RPU_OS_CREDITS_EEPROM_BYTE);
   if (Credits>MAX_CREDITS) Credits = MAX_CREDITS;
@@ -335,6 +338,8 @@ int InitNewBall(bool curStateChanged, int ballNum) {
     RPU_PushToTimedSolenoidStack(SO_DTARGET_INLINE_RESET, 15, CurrentTime + 500);
     RPU_PushToTimedSolenoidStack(SO_DTARGET_1_DOWN, 15, CurrentTime + 500);
 
+    TurnOffBonusForWizardQualifier = false;
+
     BallDrained = false;
 
     SkillShotHits = 0;
@@ -429,8 +434,14 @@ int InitNewBall(bool curStateChanged, int ballNum) {
       RPU_SetLampState(LA_SAME_PLAYER_SHOOTS_AGAIN, 1);
       RPU_SetLampState(LA_SHOOT_AGAIN, 1);
     }
-
+    
     if (BallSaveNumSeconds>0) {
+      // start ball save
+      if (DEBUG_MESSAGES){
+        Serial.println((String)"Start Ball Save:"+BallSaveNumSeconds);
+      }
+      // flash shoot again to signal the ball-save timer
+      //RPU_SetLampState(LAMP_SHOOT_AGAIN, 1, 0, 250);
       RPU_SetLampState(LA_SAME_PLAYER_SHOOTS_AGAIN, 1, 0, 500);
     }
   }
@@ -682,11 +693,11 @@ int RunAttractMode(int curState, boolean curStateChanged) {
       //   RPU_SetDisplayCredits(squawkAndTalkByte, true);
       //   squawkAndTalkByte++;
       // }
-      // if (DEBUG_MESSAGES) {
-      //   char buf[128];
-      //   sprintf(buf, "Switch = 0x%02X\n", switchHit);
-      //   Serial.write(buf);
-      // }
+      if (DEBUG_MESSAGES) {
+        char buf[128];
+        sprintf(buf, "Switch = 0x%02X\n", switchHit);
+        Serial.write(buf);
+      }
     }
   }
 
@@ -697,6 +708,21 @@ int RunAttractMode(int curState, boolean curStateChanged) {
 
 // #################### NORMAL GAMEPLAY ####################
 int NormalGamePlay(boolean curStateChanged) {
+
+  // Set BALL-SAVER Lamp Indicator. Must hit the first switch though before counting down (after skillshot).
+  // if ( !BallSaveUsed && ((CurrentTime-BallFirstSwitchHitTime)/1000) < ((unsigned long)BallSaveNumSeconds) ) {
+  //     Serial.println((String)"BALL-SAVE Remaining:"+BallSaveNumSeconds);
+  // } else if ( !BallSaveUsed && ((CurrentTime-BallFirstSwitchHitTime)/1000) < ((unsigned long)BallSaveNumLastFewSeconds) ) {
+  //     Serial.println((String)"BALL-SAVE ALMOST OVER:"+BallSaveNumSeconds);
+  //     // speed up flash on lamp shoot again to signal timing out ball save
+  //     RPU_SetLampState(LAMP_SHOOT_AGAIN, 0);
+  //     RPU_SetLampState(LAMP_SHOOT_AGAIN, 1, 0, 50);
+  //   } else {
+  //     Serial.println((String)"BALL-SAVE is Over.");
+  //     // turn off ball save since it timed out
+  //   RPU_SetLampState(LAMP_SHOOT_AGAIN, 0);
+  //   }
+
   int returnState = MACHINE_STATE_NORMAL_GAMEPLAY;
   RPU_SetDisplayCredits(DropTargetCount, true);
 
@@ -831,19 +857,32 @@ int NormalGamePlay(boolean curStateChanged) {
 
 
   // handle super bonus collect lit animation
-  if (SuperBonusReady!=true) {
-    RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, 0);
-    RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, 0);
-    RPU_SetLampState(LA_STAR_SHOOTER_TOP, 0);
-    RPU_SetLampState(LA_STAR_PFIELD_TOP, 0);
-    RPU_SetLampState(LA_STAR_PFIELD_BOTTOM, 0);
+  if (TurnOffBonusForWizardQualifier != true) {
+    if (SuperBonusReady != true)
+    {
+      RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, 0);
+      RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, 0);
+      RPU_SetLampState(LA_STAR_SHOOTER_TOP, 0);
+      RPU_SetLampState(LA_STAR_PFIELD_TOP, 0);
+      RPU_SetLampState(LA_STAR_PFIELD_BOTTOM, 0);
+    }
+    else
+    {
+      byte lamp6Phase = (CurrentTime/125)%6;
+      RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, lamp6Phase==4);
+      RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, lamp6Phase==3||lamp6Phase==4, lamp6Phase==4);
+      RPU_SetLampState(LA_STAR_SHOOTER_TOP, lamp6Phase==2||lamp6Phase==3, lamp6Phase==3);
+      RPU_SetLampState(LA_STAR_PFIELD_TOP, lamp6Phase==1||lamp6Phase==2, lamp6Phase==2);
+      RPU_SetLampState(LA_STAR_PFIELD_BOTTOM, lamp6Phase<2, lamp6Phase==1);
+    }
   } else {
-    byte lamp6Phase = (CurrentTime/125)%6;
-    RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, lamp6Phase==4);
-    RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, lamp6Phase==3||lamp6Phase==4, lamp6Phase==4);
-    RPU_SetLampState(LA_STAR_SHOOTER_TOP, lamp6Phase==2||lamp6Phase==3, lamp6Phase==3);
-    RPU_SetLampState(LA_STAR_PFIELD_TOP, lamp6Phase==1||lamp6Phase==2, lamp6Phase==2);
-    RPU_SetLampState(LA_STAR_PFIELD_BOTTOM, lamp6Phase<2, lamp6Phase==1);
+      Serial.println("Light show qualifier for WIZARD!");
+      byte wizardQualifierPhase = (CurrentTime / 95) % 5;
+      RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, wizardQualifierPhase == 4);
+      RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, wizardQualifierPhase == 3 || wizardQualifierPhase == 4, wizardQualifierPhase == 4);
+      RPU_SetLampState(LA_STAR_SHOOTER_TOP, wizardQualifierPhase == 2 || wizardQualifierPhase == 3, wizardQualifierPhase == 3);
+      RPU_SetLampState(LA_STAR_PFIELD_TOP, wizardQualifierPhase == 1 || wizardQualifierPhase == 2, wizardQualifierPhase == 2);
+      RPU_SetLampState(LA_STAR_PFIELD_BOTTOM, wizardQualifierPhase < 2, wizardQualifierPhase == 1);
   }
 
   // handle mini bonus ring collect animation
@@ -1107,35 +1146,35 @@ int InitGamePlay(boolean curStateChanged) {
   BackglassLampsLeft2Right();
 
   if (CurrentTime>=InitGamePlayAnimation) {
-    RPU_EnableSolenoidStack();
-    RPU_SetDisableFlippers(false);
-    returnState = MACHINE_STATE_INIT_NEW_BALL;
-    // if the ball is in the outhole, then we can move on
-    // if (RPU_ReadSingleSwitchState(SW_OUTHOLE)) {
-    //   if (DEBUG_MESSAGES) {
-    //     Serial.println(F("Ball is in trough - starting new ball"));
-    //   }
-    //   RPU_EnableSolenoidStack();
-    //   RPU_SetDisableFlippers(false);
-    //   returnState = MACHINE_STATE_INIT_NEW_BALL;
-    // } else {
+      RPU_EnableSolenoidStack();
+      RPU_SetDisableFlippers(false);
+      returnState = MACHINE_STATE_INIT_NEW_BALL;
+      // if the ball is in the outhole, then we can move on
+      // if (RPU_ReadSingleSwitchState(SW_OUTHOLE)) {
+      //   if (DEBUG_MESSAGES) {
+      //     Serial.println(F("Ball is in trough - starting new ball"));
+      //   }
+      //   RPU_EnableSolenoidStack();
+      //   RPU_SetDisableFlippers(false);
+      //   returnState = MACHINE_STATE_INIT_NEW_BALL;
+      // } else {
 
-    //   if (DEBUG_MESSAGES) {
-    //     Serial.println(F("Ball is not in trough - firing stuff and giving it a chance to come back"));
-    //   }
+      //   if (DEBUG_MESSAGES) {
+      //     Serial.println(F("Ball is not in trough - firing stuff and giving it a chance to come back"));
+      //   }
 
-    //   // And then set a base time for when we can continue
-    //   InitGameStartTime = CurrentTime;
-    // }
+      //   // And then set a base time for when we can continue
+      //   InitGameStartTime = CurrentTime;
+      // }
 
-    // // Wait for TIME_TO_WAIT_FOR_BALL seconds, or until the ball appears
-    // // The reason to bail out after TIME_TO_WAIT_FOR_BALL is just
-    // // in case the ball is already in the shooter lane.
-    // if ((CurrentTime-InitGameStartTime)>TIME_TO_WAIT_FOR_BALL || RPU_ReadSingleSwitchState(SW_OUTHOLE)) {
-    //   RPU_EnableSolenoidStack();
-    //   RPU_SetDisableFlippers(false);
-    //   returnState = MACHINE_STATE_INIT_NEW_BALL;
-    // }
+      // // Wait for TIME_TO_WAIT_FOR_BALL seconds, or until the ball appears
+      // // The reason to bail out after TIME_TO_WAIT_FOR_BALL is just
+      // // in case the ball is already in the shooter lane.
+      // if ((CurrentTime-InitGameStartTime)>TIME_TO_WAIT_FOR_BALL || RPU_ReadSingleSwitchState(SW_OUTHOLE)) {
+      //   RPU_EnableSolenoidStack();
+      //   RPU_SetDisableFlippers(false);
+      //   returnState = MACHINE_STATE_INIT_NEW_BALL;
+      // }
   } else {
     AttractRetro();
   }
@@ -1265,17 +1304,33 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
           if (curState!=MACHINE_STATE_WIZARD_MODE) {
             if (curState==MACHINE_STATE_NORMAL_GAMEPLAY) {
               PlaySound(18);
-              if (SuperBonusReady!=true) {
-                if (PFValidated==true) {
-                  RPU_PushToSolenoidStack(SO_DTARGET_1_DOWN, 5, true);
-                  PFValidated = false;
-                }
+
+              if (WizardState==1) {
+                // wizard qualifier collected
+                TurnOffBonusForWizardQualifier = false;
+                WizardState = 2; // qualifier collected
+
+                PlaySound(5); // sound off
+                PlaySound(50);
+
+                PlaySound(6); // laughing ming?
+                WizardState = 3;
+                return MACHINE_STATE_WIZARD_MODE;
+                
               } else {
-                SuperBonusCollecting = true;
-                CountdownSuper = SuperBonus;
-                CountdownBonusX = BonusXState;
-                LastCountdownReportTime = CurrentTime;
+                if (SuperBonusReady!=true) {
+                  if (PFValidated==true) {
+                    RPU_PushToSolenoidStack(SO_DTARGET_1_DOWN, 5, true);
+                    PFValidated = false;
+                  }
+                } else {
+                  SuperBonusCollecting = true;
+                  CountdownSuper = SuperBonus;
+                  CountdownBonusX = BonusXState;
+                  LastCountdownReportTime = CurrentTime;
+                }
               }
+              
             } else if (curState==MACHINE_STATE_SKILL_SHOT) {
               if (SkillShotState==0) PlaySound(12);
               if (SkillShotState==1) {
@@ -1855,6 +1910,8 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
             AddToSuperBonus(2);
             if (WizardState==0) PlaySound(28);
             if (WizardState==1) {
+              // wizard qualifier collected
+              TurnOffBonusForWizardQualifier = false;
               WizardState = 2;
               PlaySound(5); // sound off
               PlaySound(50);
@@ -1870,6 +1927,8 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
             AddToSuperBonus(2);
             if (WizardState==0) PlaySound(28);
             if (WizardState==1) {
+              // wizard qualifier collected
+              TurnOffBonusForWizardQualifier = false;
               WizardState = 2;
               PlaySound(5); // sound off
               PlaySound(50);
@@ -2051,11 +2110,11 @@ int RunGamePlayMode(int curState, boolean curStateChanged) {
           }
           break;
       }
-      // if (DEBUG_MESSAGES) {
-      //   char buf[128];
-      //   sprintf(buf, "Switch = 0x%02X\n", switchHit);
-      //   Serial.write(buf);
-      // }
+      if (DEBUG_MESSAGES) {
+        char buf[128];
+        sprintf(buf, "Switch = 0x%02X\n", switchHit);
+        Serial.write(buf);
+      }
     }
   } else {
     // We're tilted, so just wait for outhole
@@ -2409,12 +2468,12 @@ int SkillShot(boolean curStateChanged) {
   if (SkillShotState<=2) {
     RPU_SetDisplayFlash(CurrentPlayer, CurrentScores[CurrentPlayer], CurrentTime, 250, 2);
   } else {
-    // Serial.println(F("Skill Shot Ended"));
+    Serial.println(F("Skill Shot Ended"));
     RPU_SetLampState(LA_STAR_SHOOTER_TOP, 0);
     RPU_SetLampState(LA_STAR_SHOOTER_MIDDLE, 0);
     RPU_SetLampState(LA_STAR_SHOOTER_BOTTOM, 0);
     if (USE_STROBE) RPU_SetLampState(LA_FLASH_STROBE, 0);
-    returnState = MACHINE_STATE_NORMAL_GAMEPLAY;
+      returnState = MACHINE_STATE_NORMAL_GAMEPLAY;
     for (byte count=0; count<CurrentNumPlayers; count++) {
       RPU_SetDisplay(count, CurrentScores[count], true, 2);
     }
@@ -2430,8 +2489,11 @@ int SkillShot(boolean curStateChanged) {
 void DropTargetHit() {
   DropTargetCount++;
   if (DropTargetCount==WIZARD_GOAL_DTARGET) {
+    // hit outlanes
     RPU_SetLampState(LA_OUTLANE_RIGHT_SPECIAL, 1);
     RPU_SetLampState(LA_OUTLANE_LEFT_SPECIAL, 1);
+    // or go back to the plunger to start mode... :)
+    TurnOffBonusForWizardQualifier = true;
     RPU_SetLampState(LA_MING_TOP, 1, 0, 100);
     RPU_SetLampState(LA_MING_BOTTOM, 1, 0, 200);
     WizardState = 1;
@@ -3050,7 +3112,8 @@ int WizardMode(boolean curStateChanged) {
   }
 
   // switch hits
-  if (RPU_ReadSingleSwitchState(SW_OUTHOLE)) {
+  if (RPU_ReadSingleSwitchState(SW_OUTHOLE) || WizardState == 3)
+  {
     if (BallTimeInTrough==0) {
       BallTimeInTrough = CurrentTime;
     } else {
@@ -3080,7 +3143,9 @@ int WizardMode(boolean curStateChanged) {
         }
       }
     }
-  } else {
+  }
+  else
+  {
     BallTimeInTrough = 0;
   }
 

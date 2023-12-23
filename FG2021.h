@@ -446,11 +446,11 @@ byte SoundTimings[52] = { // byte or float
    0,  // 39        background sound 11
    15, // 40 3.721s "ignite deathray, 15 seconds" ming
    52, // 41 12.940s ming laugh five times
-   10, // 42 2.321s "lucky shot earthling" ming
+   10, // 42 2.321s "lucky shot there for you" ming
    8,  // 43 1.830s "miserable earthling" ming OR sound off
    8,  // 44 2.058s "emperor ming awaits" ming
    6,  // 45 1.500s "flash" ming
-   10, // 46 2.471s "try again earthling" ming
+   10, // 46 2.471s "Trying? Get out, you're embarassing" ming
    8,  // 47 1.856s "15 seconds" ming
    7,  // 48 1.770s "miserable earthling" ming
    6,  // 49 1.500s "flash" ming
